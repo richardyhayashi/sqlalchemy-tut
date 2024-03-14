@@ -143,3 +143,45 @@ session.close()
 
 session.add(squidward)
 print(squidward.name)
+
+# ***Relationships***
+
+u1 = User(name="pkrabs", fullname="Pearl Krabs")
+print(f"addresses: {u1.addresses}")
+
+a1 = Address(email_address="pearl.krabs@gmail.com")
+u1.addresses.append(a1)
+print(f"addresses: {u1.addresses}")
+print(a1.user)
+
+a2 = Address(email_address="pearl@aol.com", user=u1)
+print(f"addresses: {u1.addresses}")
+
+# equivalent effect as a2 = Address(user=u1)
+a2.user = u1
+
+session.add(u1)
+print(u1 in session)
+print(a1 in session)
+print(a2 in session)
+
+print(u1.id)
+print(a1.user_id)
+
+session.commit()
+
+print(u1.id)
+
+print(u1.addresses)
+
+print(u1.addresses)
+
+print(a1)
+
+print(a2)
+
+# ***Relationship in Queries***
+
+print(select(Address.email_address).select_from(User).join(User.addresses))
+
+print(select(Address.email_address).join_from(User, Address))
