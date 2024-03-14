@@ -12,7 +12,7 @@
 3. Working with Database Metadata
 4. Working with Data
 4a. Using Insert Statements
-4b.
+4b. 
 4c.
 5.
 6.
