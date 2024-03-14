@@ -51,8 +51,8 @@ with engine.connect() as conn:
     result = conn.execute(
         insert(user_table),
         [
-        {"name": "sandy", "fullname": "Sandy Cheeks"},
-        {"name": "patrick", "fullname": "Patrick Star"},
+            {"name": "sandy", "fullname": "Sandy Cheeks"},
+            {"name": "patrick", "fullname": "Patrick Star"},
         ],
     )
     conn.commit()
@@ -72,8 +72,14 @@ with engine.connect() as conn:
                 "username": "spongebob",
                 "email_address": "spongebob@sqlalchemy.org",
             },
-            {"username": "sandy", "email_address": "sandy@sqlalchemy.org"},
-            {"username": "sandy", "email_address": "sandy@squirrelpower.org"},
+            {
+                "username": "sandy",
+                "email_address": "sandy@sqlalchemy.org"
+            },
+            {
+                "username": "sandy",
+                "email_address": "sandy@squirrelpower.org"
+            },
         ],
     )
     conn.commit()
@@ -101,3 +107,15 @@ insert_stmt = insert(address_table).from_select(
 )
 
 print(insert_stmt)
+
+stmt = select(user_table).where(user_table.c.name == "spongebob")
+
+print(stmt)
+
+with engine.connect() as conn:
+    for row in conn.execute(stmt):
+        print(row)
+
+print(select(user_table))
+
+print(select(user_table.c.name, user_table.c.fullname))

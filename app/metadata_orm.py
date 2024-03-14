@@ -1,6 +1,6 @@
 from typing import List, Optional
-from sqlalchemy import create_engine, String, ForeignKey, insert
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import create_engine, String, ForeignKey, insert, select
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship
 
 DB_CONNECTION_STRING="sqlite+pysqlite:///:memory:"
 
@@ -40,3 +40,106 @@ class Address(Base):
     
 Base.metadata.create_all(engine)
 
+
+# ***INSERT***
+
+stmt = insert(User).values(name="spongebob", fullname="Spongebob Squarepants")
+
+print(stmt)
+
+compiled = stmt.compile()
+
+print(compiled.params)
+
+with engine.connect() as conn:
+    result = conn.execute(stmt)
+    conn.commit()
+    
+    print(result.inserted_primary_key)
+
+
+stmt = select(User).where(User.name == "spongebob")
+with Session(engine) as session:
+    for row in session.execute(stmt):
+        print(row)
+
+with engine.connect() as conn:
+    result = conn.execute(
+        insert(User),
+        [
+            {"name": "sandy", "fullname": "Sandy Cheeks"},
+            {"name": "patrick", "fullname": "Patrick Star"},
+        ],
+    )
+    conn.commit()
+
+# ***SELECT***
+
+print(select(User))
+
+with Session(engine) as session:
+    row = session.execute(select(User)).first()
+    print(row)
+    print(row[0])
+
+    user = session.scalars(select(User)).first()
+    print(user)
+
+
+squidward = User(name="squidward", fullname="Squidward Tentacles")
+krabs = User(name="ehkrabs", fullname="Eugene H. Krabs")
+
+print(squidward)
+
+session = Session(engine)
+
+session.add(squidward)
+session.add(krabs)
+
+print(session.new)
+session.flush()
+
+print(squidward)
+print(krabs)
+
+some_squidward = session.get(User, 4)
+print(some_squidward)
+print(some_squidward is squidward)
+
+session.commit()
+
+sandy = session.execute(select(User).filter_by(name="sandy")).scalar_one()
+print(sandy)
+
+sandy.fullname = "Sandy Squirrel"
+print(sandy in session.dirty)
+
+sandy_fullname = session.execute(select(User.fullname).where(User.id == 2)).scalar_one()
+print(sandy_fullname)
+print(sandy in session.dirty)
+
+patrick = session.get(User, 3)
+
+session.delete(patrick)
+
+session.execute(select(User).where(User.name == "patrick")).first()
+
+print(patrick in session)
+
+session.rollback()
+
+print(sandy.__dict__)
+
+print(sandy.fullname)
+
+print(sandy.__dict__)
+
+print(patrick in session)
+print(session.execute(select(User).where(User.name == "patrick")).scalar_one() is patrick)
+
+session.close()
+
+#print(squidward.name)
+
+session.add(squidward)
+print(squidward.name)

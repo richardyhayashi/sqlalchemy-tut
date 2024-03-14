@@ -11,8 +11,8 @@
 2. Working with Transactions and the DBAPI
 3. Working with Database Metadata
 4. Working with Data
-4a. Using Insert Statements
-4b. 
+4a. Using INSERT Statements
+4b. Using SELECT Statements
 4c.
-5.
+5. Data Manipulation with the ORM
 6.
