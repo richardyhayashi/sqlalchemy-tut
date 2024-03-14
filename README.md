@@ -9,7 +9,7 @@
 
 1. Establishing Connectivity - the Engine
 2. Working with Transactions and the DBAPI
-3.
+3. Working with Database Metadata
 4.
 5.
 6.
