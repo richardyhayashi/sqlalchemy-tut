@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey
+from sqlalchemy import create_engine, insert, MetaData, Table, Column, Integer, String, ForeignKey
 
 DB_CONNECTION_STRING="sqlite+pysqlite:///:memory:"
 
@@ -29,3 +29,29 @@ address_table = Table(
 )
 
 metadata_obj.create_all(engine)
+
+stmt = insert(user_table).values(name="spongebob", fullname="Spongebob Squarepants")
+
+print(stmt)
+
+compiled = stmt.compile()
+
+print(compiled.params)
+
+with engine.connect() as conn:
+    result = conn.execute(stmt)
+    conn.commit()
+    
+    print(result.inserted_primary_key)
+
+print(insert(user_table))
+
+with engine.connect() as conn:
+    result = conn.execute(
+        insert(user_table),
+        [
+        {"name": "sandy", "fullname": "Sandy Cheeks"},
+        {"name": "patrick", "fullname": "Patrick Star"},
+        ],
+    )
+    conn.commit()

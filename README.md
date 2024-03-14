@@ -10,10 +10,9 @@
 1. Establishing Connectivity - the Engine
 2. Working with Transactions and the DBAPI
 3. Working with Database Metadata
-4.
+4. Working with Data
+4a. Using Insert Statements
+4b.
+4c.
 5.
 6.
-7.
-8.
-9.
-10.

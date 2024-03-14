@@ -1,5 +1,5 @@
 from typing import List, Optional
-from sqlalchemy import create_engine, String, ForeignKey
+from sqlalchemy import create_engine, String, ForeignKey, insert
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 DB_CONNECTION_STRING="sqlite+pysqlite:///:memory:"
@@ -39,3 +39,4 @@ class Address(Base):
     
     
 Base.metadata.create_all(engine)
+
